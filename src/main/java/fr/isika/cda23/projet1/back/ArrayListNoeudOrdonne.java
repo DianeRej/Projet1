@@ -6,11 +6,11 @@ import java.util.List;
 //classe de l'arrayList permettant de créer une arrayList qui servira de base pour le tableau du fron
 public class ArrayListNoeudOrdonne {
 	
-	// Initialisation de la liste qui recevra les noeuds de l'arbre dans l'ordre
+	// Initialisation de la liste qui recevra les noeuds de l'arbre (ou plutôt les stagiaires de chaque noeud) dans l'ordre
 	// alphabétique
 	List<Stagiaire> listeOrdonnee = new ArrayList<>();
 
-	// méthode d'ajout de noeud à cette liste
+	// méthode d'ajout de stagiaire à cette liste
 	public void addStagiaire(Stagiaire stagiaire) {
 		listeOrdonnee.add(stagiaire);
 	}

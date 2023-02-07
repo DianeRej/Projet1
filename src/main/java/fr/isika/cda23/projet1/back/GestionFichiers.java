@@ -17,7 +17,7 @@ public class GestionFichiers {
 				FileReader fr = new FileReader("src/main/java/fichiers/STAGIAIRES.DON");
 
 				// objet BR pour lire plusieurs caractères à la suite
-				BufferedReader br = new BufferedReader(fr);
+				BufferedReader br = new BufferedReader(fr); 
 
 				String separationStagiaire;
 				String nom = "";

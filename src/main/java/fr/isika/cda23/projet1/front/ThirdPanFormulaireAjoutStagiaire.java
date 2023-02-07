@@ -4,6 +4,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
 import fr.isika.cda23.projet1.back.ArrayListNoeudOrdonne;
+import fr.isika.cda23.projet1.back.Noeud;
 import fr.isika.cda23.projet1.back.Stagiaire;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -12,6 +13,7 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
@@ -22,13 +24,17 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
+import javafx.scene.text.FontWeight;
+import javafx.stage.Stage;
 
 public class ThirdPanFormulaireAjoutStagiaire extends BorderPane {
 
 	// Attributs ?
 
 	// Constructeur
-	public ThirdPanFormulaireAjoutStagiaire(ArrayListNoeudOrdonne liste) {
+	public ThirdPanFormulaireAjoutStagiaire(ArrayListNoeudOrdonne liste, int admin) {
 		super();
 
 		// GridPane central
@@ -37,11 +43,14 @@ public class ThirdPanFormulaireAjoutStagiaire extends BorderPane {
 		// Création des éléments contenus dans la gridPane
 		Label lblNom = new Label("Nom :");
 		TextField fldNom = new TextField();
+		lblNom.setFont(Font.font("Comic Sans MS", FontWeight.BOLD, FontPosture.REGULAR, 15));
 
 		Label lblPrenom = new Label("Prénom :");
 		TextField fldPrenom = new TextField();
+		lblPrenom.setFont(Font.font("Comic Sans MS", FontWeight.BOLD, FontPosture.REGULAR, 15));
 
 		Label lblAnneeEntree = new Label("Année d'entrée :");
+		lblAnneeEntree.setFont(Font.font("Comic Sans MS", FontWeight.BOLD, FontPosture.REGULAR, 15));
 		ChoiceBox<String> cbAnneeEntree = new ChoiceBox<>();
 		// On ajoute dans la ChoiceBox les valeurs disponibles pour l'utilisateur:
 		cbAnneeEntree.getItems().addAll("Année d'entrée", "2002", "2003", "2004", "2005", "2006", "2007", "2009",
@@ -51,6 +60,7 @@ public class ThirdPanFormulaireAjoutStagiaire extends BorderPane {
 
 		// On ajoute un listener qui va retenir la valeur sélectionnée par l'utilisateur
 		Label AnneeChoisie = new Label();
+		AnneeChoisie.setFont(Font.font("Comic Sans MS", FontWeight.BOLD, FontPosture.REGULAR, 15));
 		cbAnneeEntree.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
 			@Override
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
@@ -60,9 +70,11 @@ public class ThirdPanFormulaireAjoutStagiaire extends BorderPane {
 
 		Label lblCodePromo = new Label("Code Promotion :");
 		TextField fldCodePromo = new TextField();
+		lblCodePromo.setFont(Font.font("Comic Sans MS", FontWeight.BOLD, FontPosture.REGULAR, 15));
 
 		Label lblDepartement = new Label("Département :");
 		TextField fldDepartement = new TextField();
+		lblDepartement.setFont(Font.font("Comic Sans MS", FontWeight.BOLD, FontPosture.REGULAR, 15));
 
 		// ajout dans la gridPane
 		gpFormulaire.add(lblNom, 0, 0);
@@ -85,7 +97,7 @@ public class ThirdPanFormulaireAjoutStagiaire extends BorderPane {
 		// En-tête de la fenêtre avec le logo
 		HBox hbLogo = new HBox();
 		try {
-			Image image = new Image(new FileInputStream("src/main/java/fichiers/logo.png"));
+			Image image = new Image(new FileInputStream("src/main/java/fichiers/logo2.png"));
 			ImageView imageView = new ImageView(image);
 			System.out.println(image.getUrl());
 			System.out.println(imageView.getId());
@@ -105,44 +117,60 @@ public class ThirdPanFormulaireAjoutStagiaire extends BorderPane {
 
 		// Pied de la fenêtre
 		VBox vbButtons = new VBox();
-		
-		//Bouton Validez qui sotcke les informations entrées dans les textField et la ChoiceBox 
-		//dans une variable stagiaire pour pouvoir ensuite l'ajouter à la liste
+
+		// Bouton Validez qui sotcke les informations entrées dans les textField et la
+		// ChoiceBox
+		// dans une variable stagiaire pour pouvoir ensuite l'ajouter à la liste
 		Button Valider = new Button("Validez");
+		Valider.setFont(Font.font("Comic Sans MS", FontWeight.BOLD, FontPosture.REGULAR, 20));
 		Valider.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				System.out.println("Je Valide");
 				Stagiaire nouveauStagiaire = new Stagiaire(fldNom.getText(), fldPrenom.getText(),
 						fldDepartement.getText(), fldCodePromo.getText(), Integer.parseInt(AnneeChoisie.getText()));
-				liste.addStagiaire(nouveauStagiaire);
+				Noeud nouveauNoeud = new Noeud(nouveauStagiaire, -1, -1, -1);
+				Noeud.ajouterNoeud(nouveauNoeud, 0);
+				liste.effacerListe();
+				Noeud.parcoursInfixe(0, liste);
 				System.out.println(nouveauStagiaire);
+
+				// retour vers le tableau
+				SecondPanTableView AffichageTableau = new SecondPanTableView(liste, admin);
+				Scene sceneTransition = new Scene(AffichageTableau);
+				Stage stage = (Stage) ThirdPanFormulaireAjoutStagiaire.this.getScene().getWindow();
+				stage.setScene(sceneTransition);
 			}
 		});
-		//Bouton retour qui devra permettre de revenir à la page précédente (le tableView) sans avoir à ajouter un stagiaire
+		// Bouton retour qui devra permettre de revenir à la page précédente (le
+		// tableView) sans avoir à ajouter un stagiaire
 		Button Retour = new Button("Retour");
+		Retour.setFont(Font.font("Comic Sans MS", FontWeight.BOLD, FontPosture.REGULAR, 20));
 		Retour.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				System.out.println("Je retourne à la page précédente");
+				// retour vers le tableau sans modification
+				SecondPanTableView AffichageTableau = new SecondPanTableView(liste, admin);
+				Scene sceneTransition = new Scene(AffichageTableau);
+				Stage stage = (Stage) ThirdPanFormulaireAjoutStagiaire.this.getScene().getWindow();
+				stage.setScene(sceneTransition);
 			}
 		});
-		
-		//Ajout des objets dans la VBox
+
+		// Ajout des objets dans la VBox
 		vbButtons.getChildren().addAll(Valider, Retour);
-		
-		//Style
+
+		// Style
 		vbButtons.setAlignment(Pos.CENTER_RIGHT);
 		vbButtons.setPadding(new Insets(50, 30, 30, 30));
 		vbButtons.setSpacing(30);
-		
-		//Ajout des trois conteneurs
+
+		// Ajout des trois conteneurs
 		this.setTop(hbLogo);
 		this.setCenter(gpFormulaire);
 		this.setBottom(vbButtons);
-		
-		//Style de la fenêtre
-		this.setStyle("-fx-background-color:beige ");
+
+		// Style de la fenêtre
+		this.setStyle("-fx-background-color:cyan ");
 	}
 
 }

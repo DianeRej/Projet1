@@ -26,6 +26,14 @@ public class Stagiaire {
 		this.promo = promo;
 		this.annee = annee;
 	}
+	
+	public Stagiaire( ) {
+		this.nom = "";
+		this.prenom = "";
+		this.dept = "";
+		this.promo = "";
+		this.annee = 0;
+	}
 
 	// méthodes pour l'écriture dans le fichier binaire
 	// sert à allonger les noms de chaque String pour qu'ils fassent toujours la

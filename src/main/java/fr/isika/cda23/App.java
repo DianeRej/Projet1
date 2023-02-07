@@ -7,8 +7,11 @@ import fr.isika.cda23.projet1.back.Noeud;
 import fr.isika.cda23.projet1.front.FirstPanFormulaireLogin;
 import fr.isika.cda23.projet1.front.SecondPanTableView;
 import javafx.application.Application;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
@@ -17,7 +20,7 @@ import javafx.stage.Stage;
  */
 public class App extends Application {
 
-	public static void main(String[] args) { 
+	public static void main(String[] args) {
 		// Lecture du fichier STAGIAIRES.DON et stockage des informations dans une
 		// arraylist
 		ArrayListStagiaire liste = new ArrayListStagiaire();
@@ -25,7 +28,7 @@ public class App extends Application {
 
 		// Construction de l'arbre et écriture dans le fichier stagiaires.bin
 		// Ajout de la racine
-		Noeud.ajouterRacine(liste); 
+		Noeud.ajouterRacine(liste);
 
 		// Ajout de tous les stagiaires à l'arbre (il y en a en tout 1365 mais pour les
 		// tests en en prend 20)
@@ -63,21 +66,29 @@ public class App extends Application {
 //				for (int i = 0; i < 20; i++) {
 //					GestionFichiers.LectureBinaire(i);
 //				}
-		
+
 		launch();
-		
+
 	}
 
 	@Override
 	public void start(Stage stage) {
-		//On instancie la liste qui va servir à générer le tableau
+		// On instancie la liste qui va servir à générer le tableau
 		ArrayListNoeudOrdonne listeOrdonnee = new ArrayListNoeudOrdonne();
 		Noeud.parcoursInfixe(0, listeOrdonnee);
 
 		// On instancie la première fenêtre grâce à la classe FirstPanFormulaireLogin
-		SecondPanTableView root = new SecondPanTableView(listeOrdonnee);
+		FirstPanFormulaireLogin root = new FirstPanFormulaireLogin(listeOrdonnee);
 
-		Scene scene = new Scene(root);
+		Scene scene = new Scene(root, 700, 370);
+		root.setStyle("-fx-background-color:cyan;");
+		GridPane grid = new GridPane();
+		grid.setHgap(40);
+		grid.setVgap(80);
+		root.getChildren().add(grid);
+		grid.setAlignment(Pos.BOTTOM_CENTER);
+		BorderPane a = new BorderPane(null);
+		a.setVisible(true);
 
 		stage.setTitle("Login");
 		stage.setScene(scene);
